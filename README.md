@@ -63,3 +63,4 @@ This project simulates an autonomous robot navigating a maize farm in Gazebo usi
 - **Robot spins in circles**: Check if the target waypoint is too close or if GPS coordinates are fluctuating.
 - **Robot hits crops**: The collision box for maize has been inflated (0.25m) to ensure detection. If it still hits, the robot might be moving too fast (`vehicle_speed` in launch file).
 - **"Waiting for GPS fix..."**: Ensure the Gazebo simulation is running (not paused).
+- **Robot driving away from crops**: The GPS coordinate system might be inverted relative to the Gazebo world. The `navigation_node.py` handles this by inverting signs (`dx = -...`, `dy = -...`). If you change the spawn orientation, you might need to adjust this.
