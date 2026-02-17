@@ -1,0 +1,12 @@
+build/
+install/
+log/
+__pycache__/
+*.pyc
+*.swp
+.vscode/
+.idea/
+.DS_Store
+robot_waypoints.csv
+# Keep crop_coordinates.csv in source, but ignore root one if it exists
+/crop_coordinates.csv
