@@ -1,0 +1,14 @@
+material CollegeSatellite
+{
+  technique
+  {
+    pass
+    {
+      texture_unit
+      {
+        texture satellite.png
+        filtering billboard
+      }
+    }
+  }
+}

@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <world name="college_road">
+    <!-- Essential light and physics -->
+    <include>
+      <uri>model://sun</uri>
+    </include>
+
+    <!-- The modified college map model -->
+    <include>
+      <uri>model://1771728719331</uri>
+    </include>
+  </world>
+</sdf>

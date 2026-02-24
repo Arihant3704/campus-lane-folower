@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <model name="college_road_network">
+    <static>true</static>
+    <link name="link">
+      <visual name="visual">
+        <geometry>
+          <plane>
+            <normal>0 0 1</normal>
+            <size>1073.3833064493178 779.2364355528787</size>
+          </plane>
+        </geometry>
+        <material>
+          <script>
+            <uri>model://college_road_network/materials/scripts</uri>
+            <uri>model://college_road_network/materials/textures</uri>
+            <name>RoadOverlay</name>
+          </script>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>

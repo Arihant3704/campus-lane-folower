@@ -1,0 +1,88 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+    <model name="1771728719331">
+      <static>true</static>
+      <pose>147.44 -146.53 -14.42 0 0 0</pose>
+
+      <link name="ground">
+        <collision name="collision">
+          <geometry>
+            <heightmap>
+              <uri>model://1771728719331/textures/1771728719331_height_map.png</uri>
+              <size>1179.56 1172.19 36.8</size>
+              <pos>147.44 -146.53  -14.42</pos>
+            </heightmap>
+          </geometry>
+        </collision>
+        <visual name="ground_visual">
+          <geometry>
+            <heightmap>
+              <use_terrain_paging>false</use_terrain_paging>
+              <texture>
+                <diffuse>model://1771728719331/textures/1771728719331_aerial_original.png</diffuse>
+                <normal>model://1771728719331/textures/1771728719331_aerial_original.png</normal>
+                <size>1179.56 1172.19 36.8</size>
+              </texture>
+              <uri>model://1771728719331/textures/1771728719331_height_map.png</uri>
+              <size>1179.56 1172.19 36.8</size>
+              <pos>147.44 -146.53 -14.42</pos>
+              <sampling>2</sampling>
+
+            </heightmap>
+          </geometry>
+        </visual>
+        <visual name="road_visual">
+          <pose>0 0 0.05 0 0 0</pose> <!-- 5cm above the ground plane reference -->
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>1179.56 1172.19</size>
+            </plane>
+          </geometry>
+          <material>
+            <script>
+              <uri>model://1771728719331/materials/scripts</uri>
+              <uri>model://1771728719331/materials/textures</uri>
+              <name>RoadOverlay</name>
+            </script>
+          </material>
+        </visual>
+      </link>
+
+
+        <!-- ===================== -->
+        <!-- Buildings -->
+        <!-- ===================== -->
+        <link name="buildings">
+          <!-- Relative to model pose -->
+          <pose>0 0 14.42 0 0 0</pose>
+          <!-- Visual -->
+          <visual name="buildings_visual">
+            <geometry>
+              <mesh>
+                <uri>model://1771728719331/textures/buildings.dae</uri>
+                <scale>1 1 1</scale>
+              </mesh>
+            </geometry>
+            <material>
+              <!-- Light grey -->
+              <ambient>0.75 0.75 0.75 1</ambient>
+              <diffuse>0.85 0.85 0.85 1</diffuse>
+              <specular>0.05 0.05 0.05 1</specular>
+              <emissive>0 0 0 1</emissive>
+            </material>
+          </visual>
+          <!-- Collision -->
+          <collision name="buildings_collision">
+            <geometry>
+              <mesh>
+                <uri>model://1771728719331/textures/buildings.dae</uri>
+                <scale>1 1 1</scale>
+              </mesh>
+            </geometry>
+          </collision>
+        </link>
+        
+
+    </model>
+</sdf>

@@ -1,0 +1,17 @@
+material RoadOverlay
+{
+  technique
+  {
+    pass
+    {
+      scene_blend alpha_blend
+      depth_write off
+
+      texture_unit
+      {
+        texture road_overlay.png
+        filtering billboard
+      }
+    }
+  }
+}

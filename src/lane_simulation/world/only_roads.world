@@ -1,0 +1,39 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <world name="only_roads">
+    <include>
+      <uri>model://sun</uri>
+    </include>
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+
+    <!-- The Standalone Road Network -->
+    <include>
+      <name>road_network</name>
+      <uri>model://college_road_network</uri>
+      <pose>0 0 0.02 0 0 0</pose> <!-- Slightly above ground plane -->
+    </include>
+
+    <!-- The Standalone Buildings -->
+    <include>
+      <name>college_buildings</name>
+      <uri>model://college_buildings</uri>
+      <pose>229.35929870605469 -187.56932067871094 0 0 0 0</pose>
+    </include>
+
+    <!-- The Standalone Satellite Imagery -->
+    <include>
+      <name>college_satellite</name>
+      <uri>model://college_satellite</uri>
+      <pose>0 0 0.01 0 0 0</pose> <!-- Just below roads -->
+    </include>
+
+    <gui fullscreen='0'>
+      <camera name='user_camera'>
+        <pose>0 0 500 0 1.57 0</pose>
+      </camera>
+    </gui>
+
+  </world>
+</sdf>

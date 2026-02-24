@@ -4,9 +4,23 @@ log/
 __pycache__/
 *.pyc
 *.swp
+*.log
 .vscode/
 .idea/
 .DS_Store
-robot_waypoints.csv
-# Keep crop_coordinates.csv in source, but ignore root one if it exists
-/crop_coordinates.csv
+*.egg-info/
+.pytest_cache/
+
+# Data and large files
+*.csv
+*.bag
+*.mkv
+*.mp4
+*.png
+!**/meshes/*.png
+!**/textures/*.png
+!**/materials/*.png
+
+# Virtual environments
+venv/
+.env

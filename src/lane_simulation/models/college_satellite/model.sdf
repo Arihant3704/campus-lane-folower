@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <model name="college_satellite">
+    <static>false</static>
+    <link name="link">
+      <gravity>0</gravity> <!-- Prevent it from falling -->
+      <visual name="visual">
+        <cast_shadows>false</cast_shadows>
+        <geometry>
+          <box>
+            <size>1179.56 1172.19 0.001</size>
+          </box>
+        </geometry>
+        <material>
+          <script>
+            <uri>model://college_satellite/materials/scripts</uri>
+            <uri>model://college_satellite/materials/textures</uri>
+            <name>CollegeSatellite</name>
+          </script>
+        </material>
+      </visual>
+      <collision name="collision">
+        <geometry>
+          <box>
+            <size>1179.56 1172.19 0.001</size>
+          </box>
+        </geometry>
+      </collision>
+    </link>
+  </model>
+</sdf>

@@ -1,0 +1,33 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <world name="pure_osm_world">
+    <include>
+      <uri>model://sun</uri>
+    </include>
+
+    <!-- Simple grey ground to replace satellite -->
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+
+    <!-- OSM Derived Roads - Centered at 0,0 -->
+    <include>
+      <name>road_network</name>
+      <uri>model://college_road_network</uri>
+      <pose>0 0 0.02 0 0 0</pose>
+    </include>
+
+    <!-- OSM Derived Buildings - Centered at 0,0 -->
+    <include>
+      <name>osm_buildings</name>
+      <uri>model://osm_buildings</uri>
+      <pose>0 0 0 0 0 0</pose>
+    </include>
+
+    <gui fullscreen='0'>
+      <camera name='user_camera'>
+        <pose>0 0 300 0 1.57 0</pose>
+      </camera>
+    </gui>
+  </world>
+</sdf>

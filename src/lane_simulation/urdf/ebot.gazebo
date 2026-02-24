@@ -1,0 +1,307 @@
+<?xml version="1.0"?>
+
+<robot name="ebot" 
+  xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <gazebo>
+    <plugin name="skid_steer_drive_controller" filename="libgazebo_ros_diff_drive.so">
+      <ros>
+        <namespace>/</namespace>
+        <remapping>cmd_vel:=cmd_vel</remapping>
+        <remapping>odom:=odom</remapping>
+      </ros>
+      <update_rate>40.0</update_rate>
+      <num_wheel_pairs>2</num_wheel_pairs>
+      <left_joint>FWLJ</left_joint>
+      <left_joint>RWLJ</left_joint>
+      <right_joint>FWRJ</right_joint>
+      <right_joint>RWRJ</right_joint>
+      <wheel_separation>1.9</wheel_separation>
+      <wheel_diameter>1.0</wheel_diameter>
+      <max_wheel_torque>200</max_wheel_torque>
+      <max_wheel_acceleration>2.0</max_wheel_acceleration>
+      <command_topic>cmd_vel</command_topic>
+      <odometry_topic>odom</odometry_topic>
+      <odometry_frame>odom</odometry_frame>
+      <robot_base_frame>ebot_base</robot_base_frame>
+      <publish_odom>true</publish_odom>
+      <publish_odom_tf>true</publish_odom_tf>
+      <publish_wheel_tf>false</publish_wheel_tf>
+    </plugin>
+  </gazebo>
+
+  <!-- Skid-steer friction: HIGH mu1 (rolling grip), LOW mu2 (lateral slip for turning) -->
+  <gazebo reference="FWL">
+    <material>Gazebo/Black</material>
+    <mu1>1.5</mu1>
+    <mu2>0.5</mu2>
+    <kp>1000000.0</kp>
+    <kd>100.0</kd>
+    <fdir1>0 1 0</fdir1>
+  </gazebo>
+  <gazebo reference="FWR">
+    <material>Gazebo/Black</material>
+    <mu1>1.5</mu1>
+    <mu2>0.5</mu2>
+    <kp>1000000.0</kp>
+    <kd>100.0</kd>
+    <fdir1>0 1 0</fdir1>
+  </gazebo>
+  <gazebo reference="RWL">
+    <material>Gazebo/Black</material>
+    <mu1>1.5</mu1>
+    <mu2>0.5</mu2>
+    <kp>1000000.0</kp>
+    <kd>100.0</kd>
+    <fdir1>0 1 0</fdir1>
+  </gazebo>
+  <gazebo reference="RWR">
+    <material>Gazebo/Black</material>
+    <mu1>1.5</mu1>
+    <mu2>0.5</mu2>
+    <kp>1000000.0</kp>
+    <kd>100.0</kd>
+    <fdir1>0 1 0</fdir1>
+  </gazebo>
+
+  <gazebo reference="ebot_base">
+    <material>Gazebo/Grey</material>
+  </gazebo>
+
+   <gazebo reference="laser">
+    <material>Gazebo/Black</material>
+  </gazebo>
+
+    <gazebo reference="camera_link">
+    <material>Gazebo/Black</material>
+  </gazebo>
+ <!--  <gazebo>
+    <plugin filename="libgazebo_ros_control.so" name="gazebo_ros_control">
+      <legacyModeNS>true</legacyModeNS>
+    </plugin>
+  </gazebo>
+ -->
+
+
+
+<!-- lidar sensor -->
+
+<!-- using GPU -->
+ <!--   <gazebo reference="laser">
+    <sensor type="gpu_ray" name="head_hokuyo_sensor">
+      <pose>0 0 0 0 0 0</pose>
+      <visualize>true</visualize>
+      <update_rate>40</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>720</samples>
+            <resolution>1</resolution>
+            <min_angle>-2.35619</min_angle>
+            <max_angle>2.35619</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.5</min>
+          <max>20.0</max>
+          <resolution>0.01</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          
+          <mean>0.0</mean>
+          <stddev>0.01</stddev>
+        </noise>
+      </ray>
+      <plugin name="gazebo_ros_head_hokuyo_controller" filename="libgazebo_ros_ray_sensor.so">
+        <topicName>/ebot/laser/scan</remapping></ros>
+        <frameName>laser</frameName>
+      </plugin>
+    </sensor>
+  </gazebo> -->
+
+<!-- using CPU 0.5 to 20m-->
+  <gazebo reference="laser">
+    <sensor type="ray" name="head_rplidar_sensor">
+      <pose>0 0 0 0 0 0</pose>
+      <visualize>false</visualize>
+      <update_rate>40</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>720</samples>
+            <resolution>1</resolution>
+            <min_angle>-2.35619</min_angle>
+            <max_angle>2.35619</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.5</min>
+          <max>20.0</max>
+          <resolution>0.01</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.01</stddev>
+        </noise>
+      </ray>
+      <plugin name="gazebo_ros_head_rplidar_controller" filename="libgazebo_ros_ray_sensor.so">
+        <ros>
+          <remapping>~/out:=/ebot/laser/scan</remapping>
+        </ros>
+        <frameName>laser</frameName>
+      </plugin>
+    </sensor>
+  </gazebo> 
+
+
+<!-- intel realsense1 -->
+   <gazebo reference="camera_link">
+    <sensor type="depth" name="intelrealsenseD435i">
+      <always_on>1</always_on>
+      <visualize>true</visualize>
+      <camera>
+        <horizontal_fov>1.57</horizontal_fov>
+        <image>
+          <width>640</width>
+          <height>480</height>
+          <format>R8G8B8</format>
+        </image>
+        <depth_camera>
+
+        </depth_camera>
+        <clip>
+          <near>0.1</near>
+          <far>100</far>
+        </clip>
+      </camera>
+      <plugin name="intelrealsense" filename="libgazebo_ros_camera.so">
+        <ros>
+          <namespace>/</namespace>
+          <remapping>image_raw:=/camera/color/image_raw</remapping>
+          <remapping>camera_info:=/camera/color/camera_info</remapping>
+        </ros>
+        <camera_name>camera</camera_name>
+        <frame_name>camera_depth_frame</frame_name>
+        <hack_baseline>0.07</hack_baseline>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+
+
+<!--10  ultrasonic sensor -->
+
+
+<!-- xacro for ultrasonic sensor using GPU -->
+<!-- 
+<xacro:macro name="ultrasonic_sensor" params="name">
+    <gazebo reference="${name}">
+    <sensor type="gpu_ray" name="${name}">
+      <pose>0 0 0 0 0 0</pose>
+      <visualize>false</visualize>
+      <update_rate>40</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>720</samples>
+            <resolution>1</resolution>
+            <min_angle>-0.1309</min_angle>
+            <max_angle>0.1309</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.03</min>
+          <max>4.5</max>
+          <resolution>0.01</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          
+          <mean>0.0</mean>
+          <stddev>0.01</stddev>
+        </noise>
+      </ray>
+      <plugin name="ultrasonic_sensor" filename="libgazebo_ros_ray_sensor.so">
+        <topicName>/ebot/${name}/scan</remapping></ros>
+        <frameName>${name}_ultrasonic_sensor</frameName>
+      </plugin>
+    </sensor>
+  </gazebo>
+</xacro:macro>-->
+
+
+<!-- using CPU -->
+<!-- <xacro:macro name="ultrasonic_sensor" params="name">
+    <gazebo reference="${name}">
+
+    <sensor type="ray" name="head_rplidar_sensor">
+      <pose>0 0 0 0 0 0</pose>
+      <visualize>false</visualize>
+      <update_rate>40</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>720</samples>
+            <resolution>1</resolution>
+            <min_angle>-0.1309</min_angle>
+            <max_angle>0.1309</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.03</min>
+          <max>4.5</max>
+          <resolution>0.01</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.01</stddev>
+        </noise>
+      </ray>
+      <plugin name="ultrasonic_sensor" filename="libgazebo_ros_ray_sensor.so">
+        <topicName>/ebot/${name}/scan</remapping></ros>
+        <frameName>${name}_ultrasonic_sensor</frameName>
+      </plugin>
+    </sensor>
+  </gazebo> 
+  </xacro:macro> 
+
+<xacro:ultrasonic_sensor name="FUS1"/> 
+<xacro:ultrasonic_sensor name="FUS2"/> 
+<xacro:ultrasonic_sensor name="FUS3"/> 
+<xacro:ultrasonic_sensor name="FUS4"/> 
+<xacro:ultrasonic_sensor name="RUS5"/> 
+<xacro:ultrasonic_sensor name="RUS6"/> 
+<xacro:ultrasonic_sensor name="RHUS7"/> 
+<xacro:ultrasonic_sensor name="RHUS9"/> 
+<xacro:ultrasonic_sensor name="LHUS9"/> 
+<xacro:ultrasonic_sensor name="LHUS10"/> -->
+
+<!-- imu -->
+  <gazebo reference="imu_link">
+    <gravity>true</gravity>
+    <sensor name="imu_sensor" type="imu">
+      <always_on>true</always_on>
+      <update_rate>100</update_rate>
+      <visualize>true</visualize>
+      <topic>__default_topic__</topic>
+      <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+        <ros>
+          <remapping>~/out:=imu</remapping>
+        </ros>
+        <bodyName>imu_link</bodyName>
+        <updateRateHZ>10.0</updateRateHZ>
+        <gaussianNoise>0.0</gaussianNoise>
+        <xyzOffset>0 0 0</xyzOffset>
+        <rpyOffset>0 0 0</rpyOffset>
+        <frameName>imu_link</frameName>
+        <initialOrientationAsReference>false</initialOrientationAsReference>
+      </plugin>
+      <pose>0 0 0 0 0 0</pose>
+    </sensor>
+  </gazebo>
+
+
+
+</robot>

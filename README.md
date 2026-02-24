@@ -1,71 +1,86 @@
-# Autonomous Maize Farm Navigation
+# Autonomous Campus Vehicle & Lane Following Simulation
 
-This project simulates an autonomous robot navigating a maize farm in Gazebo using ROS 2. The robot uses GPS for waypoint navigation and LiDAR for obstacle avoidance.
+A production-grade ROS 2 autonomous vehicle simulation system. This project features a mathematically accurate "Digital Twin" of a college campus, real-time computer vision for lane keeping, and a premium web-based remote cockpit for manual/autonomous control.
 
-## Project Overview
+## � File Location
+The main entrance to the project documentation is located at:
+**`/home/arihant/ros2_ws/README.md`**
 
-- **Environment**: A generated maize field with 6 rows of crops and a grass ground plane.
-- **Robot**: A 4-wheeled differential drive robot equipped with:
-    - **GPS**: Simulated to provide latitude/longitude.
-    - **LiDAR**: Used for obstacle detection and avoidance.
-    - **IMU/Odom**: Used for orientation (yaw).
-- **Navigation**:
-    - **Smart Gap Path**: Reads `crop_coordinates.csv` to snake through crop row gaps (Top-Right -> Bottom-Left).
-    - **Collision Recovery**: Implements "Reverse and Turn" logic if the robot gets too close.
-    - **GPS & LiDAR**: Combines global waypoints with local obstacle avoidance.
+## �🚀 System Architecture
 
-## Prerequisites
+- **Simulated Environment:** A precise 1:1 scale recreation of a campus using OpenStreetMap (OSM) data.
+- **Perception (Computer Vision):** A high-aerial Dual-Boundary lane detection pipeline. It uses an Intel RealSense camera mounted at 5m height with a 90° FOV to capture road markings (Yellow/White) across 50% of the image.
+- **Control (Brain):** A 4-Wheel Skid Steer Proportional Controller with adaptive speed management (maintains momentum on sharp turns) and 200Nm of high-torque physics.
+- **Web Interface:** A premium "Agribot" cockpit with an analog virtual joystick, real-time MJPEG streaming, and a HUD overlay for live correction telemetry.
 
-- **ROS 2 Humble** (or compatible)
-- **Gazebo Classic**
-- **Python 3**
-- Key Packages: `gazebo_ros`, `robot_state_publisher`, `xacro`
+---
 
-## Installation
+## 📂 Project Structure
 
-1.  **Clone the workspace**:
-    ```bash
-    git clone https://github.com/Arihant3704/agribot_sim.git
-    cd agribot_sim
-    git submodule update --init --recursive
-    ```
-2.  **Install Dependencies**:
-    ```bash
-    rosdep install --from-paths src --ignore-src -r -y
-    ```
-3.  **Build**:
-    ```bash
-    colcon build
-    source install/setup.bash
-    ```
-4.  **Model Setup** (Important):
-    Ensure the `virtual_maize_field` models are accessible to Gazebo. The `setup.py` and launch file handle this, but you can also copy them manually to `~/.gazebo/models` if issues persist.
+- `src/lane_simulation`: The Gazebo world, URDF models (4-wheel drive Ebot robot), and launch configurations.
+- `src/lane_detection`: Core Python logic for the autonomous lane following algorithm.
+- `remote_control_gui.py`: The Web-based cockpit application (Flask + ROS 2).
+- `tools/`: Utility scripts for environment generation.
+  - `tools/parse_osm_road.py`: Generates high-resolution (10px/m) OSM-based road textures.
+  - `tools/osm_to_gazebo_buildings.py`: Procedurally extrudes 3D buildings from OSM data.
 
-## Running the Simulation
+---
 
-1.  **Launch the Simulation**:
-    ```bash
-    source install/setup.bash
-    ros2 launch farm_sim farm_simulation.launch.py
-    ```
-    - This opens Gazebo.
-    - Spawns the maize field and the robot at the starting corner (-24, -24).
-    - Starts the `serpentine_navigator` node.
+## 🛠 Prerequisites
 
-2.  **Monitor the Robot**:
-    - The terminal will show navigation status:
-        - `[MOVING] Dist: ...`
-        - `Scan: Min Front Dist = ...`
-    - If the robot hits a crop, it will log `Obstacle detected! Starting Recovery: REVERSING`.
+- **OS:** Ubuntu 22.04
+- **ROS 2:** Humble Hawksbill
+- **Simulator:** Gazebo (Classic)
+- **Python Dependencies:**
+  ```bash
+  pip install Flask opencv-python numpy
+  ```
 
-## Data Output
+---
 
-- **`robot_waypoints.csv`**: Generated in the directory where you launch the simulation. Contains the planned path.
-- **`crop_coordinates.csv`**: Source data located in `src/farm_sim/config/`. Define the crop positions.
+## 🚦 Getting Started
 
-## Troubleshooting
+### 1. Build & Source
+```bash
+colcon build --symlink-install
+source install/setup.bash
+```
 
-- **Robot spins in circles**: Check if the target waypoint is too close or if GPS coordinates are fluctuating.
-- **Robot hits crops**: The collision box for maize has been inflated (0.25m) to ensure detection. If it still hits, the robot might be moving too fast (`vehicle_speed` in launch file).
-- **"Waiting for GPS fix..."**: Ensure the Gazebo simulation is running (not paused).
-- **Robot driving away from crops**: The GPS coordinate system might be inverted relative to the Gazebo world. The `navigation_node.py` handles this by inverting signs (`dx = -...`, `dy = -...`). If you change the spawn orientation, you might need to adjust this.
+### 2. Launch the Simulation
+Starts the campus world with the Ebot robot spawned at the optimized starting position (-9.2, -126.3):
+```bash
+ros2 launch lane_simulation synthetic_sim.launch.py
+```
+*Note: You can override the spawn point using `x:=val y:=val yaw:=val` arguments.*
+
+### 3. Start the Control Systems
+In a new terminal, launch the vision brain and the web cockpit:
+```bash
+# Terminal 2: Start Lane Following Brain
+ros2 run lane_detection lane_keeper
+
+# Terminal 3: Start Web Cockpit
+python3 remote_control_gui.py
+```
+
+### 4. Access the Cockpit
+Open your browser and navigate to:
+**`http://localhost:5000`** (or your machine's IP address on the network).
+
+---
+
+## 🧠 Technical Highlights
+1. **Dual-Boundary Perception:** Detects both yellow side-lines and white center-dashes separately. It can navigate even if one boundary is obscured by offsetting from the visible line.
+2. **High-Torque Physics:** Configured with specific `mu1`/`mu2` friction coefficients to allow realistic skid-steering "drifts" and pivoting on different road surfaces.
+3. **Adaptive Drive Mode:** Automatically reduces speed to ~75% during sharp turns to maintain stability, while maximizing speed on straights.
+
+## 📡 Remote Control Features
+- **Analog Navigator:** Premium virtual joystick (powered by `nipplejs`) providing 360° fluid control and variable speed.
+- **Real-Time HUD:** Live overlay on the camera feed showing Detection Mode (Both/Left/Right), Error (px), Steer magnitude, and an analog steering-bar.
+- **Drone-Perspective:** Aerial camera view (5m altitude) providing superior visibility for lane navigation.
+- **Emergency Stop:** Integrated safety cut-off to halt all robot movement immediately.
+
+---
+
+## 📜 License
+This project is licensed under the MIT License. Developed for educational-grade autonomous vehicle research.
