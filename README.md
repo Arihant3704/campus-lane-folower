@@ -2,7 +2,7 @@
 
 A production-grade ROS 2 autonomous vehicle simulation system. This project features a mathematically accurate "Digital Twin" of a college campus, real-time computer vision for lane keeping, and a premium web-based remote cockpit for manual/autonomous control.
 
-## � File Location
+##  File Location
 The main entrance to the project documentation is located at:
 **`/home/arihant/ros2_ws/README.md`**
 
@@ -75,12 +75,19 @@ Open your browser and navigate to:
 3. **Adaptive Drive Mode:** Automatically reduces speed to ~75% during sharp turns to maintain stability, while maximizing speed on straights.
 
 ## 📡 Remote Control Features
+
+https://github.com/user-attachments/assets/d5d600b5-5068-4062-a823-05bac59b9b67
+
+
 - **Analog Navigator:** Premium virtual joystick (powered by `nipplejs`) providing 360° fluid control and variable speed.
 - **Real-Time HUD:** Live overlay on the camera feed showing Detection Mode (Both/Left/Right), Error (px), Steer magnitude, and an analog steering-bar.
 - **Drone-Perspective:** Aerial camera view (5m altitude) providing superior visibility for lane navigation.
 - **Emergency Stop:** Integrated safety cut-off to halt all robot movement immediately.
 
 ---
+
+
+
 
 ## 📜 License
 This project is licensed under the MIT License. Developed for educational-grade autonomous vehicle research.
